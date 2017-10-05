@@ -638,7 +638,14 @@ class Minio(object):
 
         # Return the stat
         return stat
-
+    def get_encrypted_object(self,bucket_name, object_name, encrypt_materials):
+        """
+        Deciphers and streams data stored in the server after applying a 
+        specified encryption materials.
+        """
+        if encrypt_materials is None:
+            raise InvalidArgumentError("Unable to recognize empty encryption properties")
+        
     def get_object(self, bucket_name, object_name, request_headers=None):
         """
         Retrieves an object from a bucket.
