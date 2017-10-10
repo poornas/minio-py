@@ -36,7 +36,7 @@ with open('README.rst', 'r', 'utf-8') as f:
     readme = f.read()
 
 packages = [
-    'minio',
+    'minio', 'minio.encrypt'
 ]
 
 requires = [

@@ -33,6 +33,10 @@ __version__ = '3.0.1'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2015, 2016, 2017 Minio, Inc.'
 
+from minio.encrypt.keys import SymmetricKey, CryptKey, CBC
+from minio.encrypt.dare import DareHmacSha256
+from minio.encrypt.cbc import AesCbcPkcs7
+from minio.encrypt.cipher import Cipher
 from .api import Minio
 from .error import ResponseError
 from .post_policy import PostPolicy
