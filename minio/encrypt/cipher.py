@@ -25,17 +25,12 @@ This module implements all helper functions.
 """
 
 from __future__ import absolute_import
-from .dare import DareHmacSha256
 from .keys import SymmetricKey
 from .cbc import AesCbcPkcs7
 # _AES_CBC_PKCS7 specifies the client-side-encryption algorithm AES-CBC with
 # PKCS7 padding. This algorithm is implemented for AWS compability but is
 # not recommended because of security issues.
 _AES_CBC_PKCS7 = "AES/CBC/PKCS7"
-# _DARE_HMAC_SHA256 specifies the client-side-encryption algorithm DARE with
-# a HMAC-SHA256 KDF scheme. This algorithm provides tamper-proof encryption
-# and is recommended over any current AWS S3 client-side-encryption algorithm.
-_DARE_HMAC_SHA256 = "DARE-HMAC-SHA256"
 
 # AWS client-side-encryption headers.
 # See: https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html
@@ -54,16 +49,11 @@ class Cipher(object):
         self._key = key
         self._algorithm = algorithm
         self._cipher = None
-        if algorithm == _AES_CBC_PKCS7:
-            self._cipher = AesCbcPkcs7(key)
-        elif algorithm == _DARE_HMAC_SHA256:
-            try:
-                symmetric_key = SymmetricKey(self._key)
-                if len(key) != 32:
-                    raise ValueError("encryption key must be 256 bits long")
-                self.cipher =  DareHmacSha256(symmetric_key)
-            except:
-                raise ValueError("encryption key must be a symmetric key")   
+        try:
+            if algorithm == _AES_CBC_PKCS7:
+                self._cipher = AesCbcPkcs7(key)
+        except:
+            raise ValueError("algorithm %s is not supported" % algorithm)
     def Seal(self,header, src):
         pass
     def Open(self, header, src):
